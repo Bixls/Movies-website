@@ -8,6 +8,7 @@ class Movie {
     private $description;
     private $genre;
     private $type;
+    private $year;
     private $release_time;
     private $run_time;
     private $keyword;
@@ -32,6 +33,7 @@ class Movie {
         $this->description=$data['description'];
         $this->genre=$data['genre'];
         $this->type=$data['type'];
+        $this->year=$data['year'];
         $this->release_time=$data['release_time'];
         $this->run_time=$data['run_time'];
         $this->keyword=$data['keyword'];
@@ -49,6 +51,7 @@ class Movie {
         $data['description']=$this->description;
         $data['genre']=$this->genre;
         $data['type']=$this->type;
+        $data['year']=$this->year;
         $data['release_time']=$this->release_time;
         $data['run_time']=$this->run_time;
         $data['keyword']=$this->keyword;

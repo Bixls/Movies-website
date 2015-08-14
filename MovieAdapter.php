@@ -23,6 +23,7 @@ private function CreateMovie() {
   $data['description']=$_POST['description'];
   $data['genre']=$_POST['genre'];
   $data['type']=$_POST['type'];
+  $data['year']=$_POST['year'];
   $data['release_time']=$_POST['release_time'];
   $data['run_time']=$_POST['run_time'];
   $data['keyword']=$_POST['keyword'];
@@ -59,8 +60,8 @@ private function CreateActor($i) {
 private function updateMovie($movie) {
 
   $data=$movie->getMovie();
-  $sql = "INSERT INTO Movies (title,poster,rating,description,genre,type,release_time,run_time,keyword,big_picture,parent_id) 
-  VALUES ('".$data['title']."', '".$data['poster']."', '".$data['rating']."','".$data['description']."','".$data['genre']."','".$data['type']."','".$data['release_time']."','".$data['run_time']."','".$data['keyword']."','".$data['big_picture']."','".$data['parent_id']."')";
+  $sql = "INSERT INTO Movies (title,poster,rating,description,genre,type,year,release_time,run_time,keyword,big_picture,parent_id) 
+  VALUES ('".$data['title']."', '".$data['poster']."', '".$data['rating']."','".$data['description']."','".$data['genre']."','".$data['type']."','".$data['year']."','".$data['release_time']."','".$data['run_time']."','".$data['keyword']."','".$data['big_picture']."','".$data['parent_id']."')";
     $query = mysql_query($sql);
     if(!$query)
     {
@@ -99,6 +100,82 @@ public function Create()
   }
 
 }
+
+private function editMovie($movie) {
+
+  $data=$movie->getMovie();
+  $query = mysql_query("UPDATE Movies SET title='".$_POST['title']."', poster='".$_POST['poster']."' , rating='".$_POST['rating']."' , description='".$_POST['description']."' , genre='".$_POST['genre']."' , type='".$_POST['type']."' , year='".$_POST['year']."' , release_time='".$_POST['release_time']."', run_time='".$_POST['run_time']."' , keyword='".$_POST['keyword']."' , big_picture='".$_POST['big_picture']."' , parent_id='".$_POST['parent_id']."' WHERE id='".$_POST['id']."'") or die (mysql_error());
+    if(!$query)
+    {
+      echo"fail";
+    }
+
+}
+
+private function editActor($movie) {
+
+  $data=$movie->getMovie();
+  $query = mysql_query("UPDATE Actors SET title='".$_POST['title']."' , name='".$_POST['name']."' , role='".$_POST['role']."' , picture='".$_POST['picture']."' , movie_id='".$_POST['movie_id']."' WHERE id='".$_POST['id']."'") or die (mysql_error());
+    if(!$query)
+    {
+      echo"fail";
+    }
+
+}
+
+public function edit() {
+
+  $movie = new Movie();
+  $actor = new Actor();
+  $data = array();
+  $movie=$this->CreateMovie();
+  $this->editMovie($movie);
+  for($i=1;$i<=10;$i++)
+  {
+    $actor=$this->CreateActor($i);
+    $data=$actor->getActor();
+    if ($data['title']=="")
+      {break;}
+    $this->editActor($actor);
+  }
+
+}
+
+public function search($title) {
+
+  $sql = mysql_query("SELECT * FROM Movies ORDER BY year DESC WHERE title LIKE '%".$title."%'");
+
+  $result = mysql_fetch_assoc($sql);
+
+  return $result;
+
+}
+
+public function remove() {
+  $id=$_POST['id'];
+  $query = mysql_query("DELETE FROM Movies WHERE id = ".$id);
+  $sql = mysql_query("DELETE FROM Actors WHERE movie_id = ".$id);
+
+  if ($query) {
+    //sucess
+    echo "success";
+  }else {
+    //throw an error (failed to delete)
+    echo "fail";
+  }
+}
+
+public function viewMovies($i) {
+
+  $sql = mysql_query("SELECT * FROM Movies ORDER BY year DESC LIMIT ".$i);
+
+  $result = mysql_fetch_assoc($sql);
+
+  return $result;
+
+}
+
+
 
 }
 
