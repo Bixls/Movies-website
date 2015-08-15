@@ -212,7 +212,16 @@ public function viewMovies($i) {
 
 }
 
+public function getMovieData() {
 
+  $id=$_POST['id'];
+  $sql = mysql_query("SELECT * FROM Movies WHERE id=$id");
+  $data = mysql_fetch_assoc($sql);
+  $query = mysql_query("SELECT * FROM Actors WHERE movie_id=$id");
+  $data["actors"]=mysql_fetch_assoc($query);
+  return $data;
+
+}
 
 }
 
