@@ -3,7 +3,7 @@
 class MovieAdapter
 {
 
-public function getData() {
+private function getAPI() {
 
   $title= urlencode($_POST['title']);
   $season=$_POST['season'];
@@ -12,6 +12,43 @@ public function getData() {
   $data = json_decode($json,true);
   return data;
 }
+
+public function getData() {
+
+  $api_data = array();
+
+  $api_data = $this->getAPI();
+
+  $data['title']=$api_data['Title'];
+  $data['poster']=$api_data['Poster'];
+  $data['rating']=$api_data['imdbRating'];
+  $data['description']=$api_data['Plot'];
+  $data['genre']=$api_data['Genre'];
+  $data['type']=$api_data['Type'];
+  $data['year']=$api_data['Year'];
+  $data['release_time']=$api_data['Released'];
+  $data['run_time']=$api_data['Runtime'];
+  $actors=$api_data['Actors'];
+  $x;
+  $i=0;
+  while(1) {
+
+    $x=strpos($actors, ",");
+    if ($pos === false) {
+      $data['actors'][$i]=substr($actors,0);
+    }
+    else {
+    $data['actors'][$i]=substr($actors,0,$x+1);
+    $actors=substr($actors,$x+1);
+    $i++;
+    }
+
+  }
+
+return $data;
+
+}
+
 
 private function CreateMovie() {
 
