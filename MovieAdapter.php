@@ -10,7 +10,7 @@ private function getAPI() {
   $episode=$_POST['episode'];
   $json = file_get_contents('http://www.omdbapi.com/?t='.$title.'&Season='.$season.'&Episode='.$episode);
   $data = json_decode($json,true);
-  return data;
+  return $data;
 }
 
 public function getData() {
@@ -34,11 +34,12 @@ public function getData() {
   while(1) {
 
     $x=strpos($actors, ",");
-    if ($pos === false) {
+    if ($x === false) {
       $data['actors'][$i]=substr($actors,0);
+      break;
     }
     else {
-    $data['actors'][$i]=substr($actors,0,$x+1);
+    $data['actors'][$i]=substr($actors,0,$x);
     $actors=substr($actors,$x+1);
     $i++;
     }
@@ -267,6 +268,7 @@ public function uploadImage($img) {
 
 if(isset($_POST['submit'])){ 
  if($img['name']==''){  
+  echo "hi";
   return false;
  }else{
   $filename = $img['tmp_name'];
@@ -276,6 +278,7 @@ if(isset($_POST['submit'])){
   $pvars   = array('image' => base64_encode($data));
   $timeout = 30;
   $curl = curl_init();
+  curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
   curl_setopt($curl, CURLOPT_URL, 'https://api.imgur.com/3/image.json');
   curl_setopt($curl, CURLOPT_TIMEOUT, $timeout);
   curl_setopt($curl, CURLOPT_HTTPHEADER, array('Authorization: Client-ID ' . $client_id));
