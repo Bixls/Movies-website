@@ -1,4 +1,4 @@
-<form class="sendform" method="POST" action="test.php">
+<form class="sendform" method="POST" action="action.php">
 <fieldset>
 <legend>Personal information:</legend>
 title:<br>

@@ -72,7 +72,7 @@ private function CreateMovie() {
   $img = $this->uploadImage($_FILES['big_picture']);
   if ($img!=false)
   {
-  $data['big_picture']=$url;
+  $data['big_picture']=$img;
   }
   if (!empty($_POST['parent']))
   {
@@ -94,14 +94,20 @@ private function CreateActor($i) {
   $data['title']=$_POST['title'.$i];
   $data['name']=$_POST['name'.$i];
   $data['role']=$_POST['role'.$i];
-  $url = $this->uploadImage($_FILES['picture']);
+  if (!empty($_FILES['picture'.$i]['tmp_name']))
+  {
+  $url = $this->uploadImage($_FILES['picture'.$i]);
   if ($url!=false)
   {
   $data['picture']=$url;
   }
+  }
+  else {
+  $data['picture']="";
+  }
   $sql = mysql_query("SELECT * FROM Movies WHERE title LIKE '%".$_POST['title']."%'");
   $result = mysql_fetch_assoc($sql);
-  $data['movie_id']=$result['id'];
+  $data['movie_id']=$result['m_id'];
   $actor->setActor($data);
   return $actor; 
 
@@ -123,9 +129,9 @@ private function updateMovie($movie) {
 private function updateActor($actor) {
 
   $data=$actor->getActor();
-  $sql = "INSERT INTO Actors (title,name,role,picture,movie_id)
+  $sql = "INSERT INTO Actors (title,name,role,picture,m_id)
   VALUES ('".$data['title']."', '".$data['name']."', '".$data['role']."','".$data['picture']."','".$data['movie_id']."')";
-    $query = mysql_query($sql);
+    $query = mysql_query($sql) or die(mysql_error());
     if(!$query)
     {
       echo"fail";
@@ -268,7 +274,6 @@ public function uploadImage($img) {
 
 if(isset($_POST['submit'])){ 
  if($img['name']==''){  
-  echo "hi";
   return false;
  }else{
   $filename = $img['tmp_name'];
@@ -276,7 +281,7 @@ if(isset($_POST['submit'])){
   $handle = fopen($filename, "r");
   $data = fread($handle, filesize($filename));
   $pvars   = array('image' => base64_encode($data));
-  $timeout = 30;
+  $timeout = 90;
   $curl = curl_init();
   curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
   curl_setopt($curl, CURLOPT_URL, 'https://api.imgur.com/3/image.json');

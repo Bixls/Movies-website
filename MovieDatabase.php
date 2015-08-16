@@ -5,7 +5,7 @@ require_once ("configuration.php");
 
 $connect = new DatabaseConnect();
 
-$sql = "CREATE TABLE Movies (id int NOT NULL AUTO_INCREMENT,
+$sql = "CREATE TABLE Movies (m_id int NOT NULL AUTO_INCREMENT,
 title varchar(255),
 poster varchar(255),
 rating float,

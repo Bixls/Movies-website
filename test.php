@@ -5,7 +5,6 @@ require_once ("configuration.php");
 require_once ("movie.php");
 require_once ("actor.php");
 
+$connect = new DatabaseConnect();
 $adapter = new MovieAdapter();
-$img=$_FILES['img'];
-$data=$adapter->uploadImage($img);
-print_r($data);
+$adapter->Create();

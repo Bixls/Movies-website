@@ -21,9 +21,9 @@ class Actor {
     public function setActor (array $data = array()) {
 
         $this->title=$data['title'];
+        $this->picture=$data['picture'];
         $this->name=$data['name'];
         $this->role=$data['role'];
-        $this->picture=$data['picture'];
         $this->movie_id=$data['movie_id'];
               
     }
